@@ -2,7 +2,7 @@
 
 session_start();
 if (isset($_SESSION['errorMessage'])) {
-    echo $_SESSION['errorMessage'];
+    // echo $_SESSION['errorMessage'];
     unset($_SESSION['errorMessage']); // エラーメッセージを表示したらセッションから削除する
 }
 
@@ -41,13 +41,13 @@ if (isset($_SESSION['errorMessage'])) {
     <div id="error-message"></div>
 
 
-    <!-- <script> jsなくてもエラー表示できる
+    <script> //jsなくてもエラー表示できる
         //$_SESSION['errorMessage'] がセットされているかどうかを確認し、値が存在する場合はその値を代入。値が存在しない場合は空の文字列を代入。
         const errorMessage = "<?php echo isset($_SESSION['errorMessage']) ? $_SESSION['errorMessage'] : ''; ?>";
         if (errorMessage !== '') {
             $("#error-message").html(errorMessage);
         }
-    </script> -->
+    </script>
 
 
 </body>

@@ -2,10 +2,6 @@
 
 
 session_start();
-if (isset($_SESSION['errorMessage'])) {
-    echo $_SESSION['errorMessage'];
-    unset($_SESSION['errorMessage']); // エラーメッセージを表示したらセッションから削除する
-}
 
 
 //関数読み込み
