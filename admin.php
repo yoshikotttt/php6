@@ -42,6 +42,8 @@ $values = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>管理者ページ</title>
     <style>
         .img {
@@ -112,6 +114,7 @@ $values = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <th>管理フラグ</th>
                 <th>使用中(=0)</th>
                 <th>user-id</th>
+                <th>削除</th>
 
             </tr>
 
@@ -121,11 +124,75 @@ $values = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <td><?= h($v["kanri_flg"]) ?></td>
                     <td><?= h($v["life_flg"]) ?></td>
                     <td><?= h($v["user_id"]) ?></td>
+                    <td><div class="delete-button-container">
+                    <?php if ($_SESSION["kanri_flg"] == 0) { ?>
+                        <img src="./myimg/trash.svg" alt="" data-id="<?= $v["id"] ?>" class="d-button">
+                    <?php } ?>
+                </div></td>
                 </tr>
             <?php } ?>
         </table>
     </div>
 
+    <script>
+        //削除アラート
+        $(document).ready(function() {
+            $('.d-button').click(function() {
+                const dataId = $(this).data('id'); // 削除するデータのIDを取得
+                console.log(dataId);
+                Swal.fire({
+                    title: '削除',
+                    text: '本当に削除しますか？',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: '削除',
+                    cancelButtonText: 'キャンセル'
+                }).then((result) => {
+                    if (result.dismiss !== Swal.DismissReason.cancel) {
+                        // 削除を押した場合の処理
+                        ajax(dataId);
+                    } else { // キャンセルボタンがクリックされたら
+                        Swal.fire(
+                            'キャンセルしました',
+                            '投稿は削除されませんでした',
+                            'info'
+                        )
+                    }
+                });
+            })
+        });
+
+        function ajax(dataId) {
+            $.ajax({
+                    type: "post", //HTTPメソッド
+                    url: "delete_kanri.php", //データの送信先
+                    data: {
+                        id: dataId
+                    }, //送信するデータ
+                    dataType: "json" //レスポンスの型、種類
+                })
+                .done(function(data) {
+                    if (data.status === "success") {
+                        Swal.fire({
+                            title: '削除しました',
+                            icon: 'success',
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
+                            location.reload(); //
+                        });
+                    } else {
+                        Swal.fire({
+                            title: '削除に失敗しました',
+                            icon: 'error',
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+                    }
+
+                })
+        };
+    </script>
 
 </body>
 
