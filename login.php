@@ -19,7 +19,16 @@ if (isset($_SESSION['errorMessage'])) {
     <script src="jquery-3.6.0.min.js"></script>
 
     <title>ログイン</title>
-  
+  <style>
+    body {
+        background-color: #f4f4ff;
+        display: flex;
+        flex-direction: column;
+    }
+    div {
+        margin-bottom: 10px;
+    }
+  </style>
 </head>
 
 <body>
